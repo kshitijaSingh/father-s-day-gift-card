@@ -1,0 +1,1776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Father's Day, Papa</title>
+  <style>
+    :root {
+      --sky-top: #fbe8f3;
+      --sky-mid: #e5e4ff;
+      --sky-low: #d9f6f1;
+      --ink: #1f1534;
+      --gold: #ffd573;
+      --gold-deep: #e49d34;
+      --cream: #fff9e2;
+      --rose: #f9b1c2;
+      --violet: #8b77d6;
+      --mint: #8ecdc0;
+      --path-x: 50%;
+      --girl-y: 14vh;
+      --girl-scale: 0.72;
+      --start-y: 31;
+      --family-y: 31vh;
+      --stride-speed: 2.4s;
+      --limb-swing: 13deg;
+      --final-photo-size: 500px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: #33294a;
+      font-family: "Georgia", "Times New Roman", serif;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.78), transparent 28rem),
+        linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 48%, var(--sky-low) 100%);
+      overflow-x: hidden;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .story {
+      position: relative;
+      height: 8200px;
+    }
+
+    .scene {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      min-height: 640px;
+      overflow: hidden;
+      isolation: isolate;
+      transition: transform 1.5s ease, filter 1.5s ease;
+    }
+
+    .scene.zoom-out {
+      transform: scale(0.94);
+      filter: saturate(1.08);
+    }
+
+    .aurora {
+      position: absolute;
+      inset: -12%;
+      z-index: -4;
+      background:
+        radial-gradient(circle at 50% 16%, rgba(255, 236, 163, 0.38), transparent 26%),
+        radial-gradient(circle at 30% 72%, rgba(142, 205, 192, 0.28), transparent 30%),
+        radial-gradient(circle at 72% 64%, rgba(246, 167, 187, 0.24), transparent 34%);
+      animation: breathe 9s ease-in-out infinite alternate;
+    }
+
+    @keyframes breathe {
+      from { transform: scale(1); opacity: 0.78; }
+      to { transform: scale(1.06); opacity: 1; }
+    }
+
+    .stars,
+    .particles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .star {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+      animation: twinkle var(--twinkle, 3s) ease-in-out infinite;
+      animation-delay: var(--delay, 0s);
+    }
+
+    @keyframes twinkle {
+      0%, 100% { transform: scale(0.45); opacity: 0.22; }
+      50% { transform: scale(1.6); opacity: 1; }
+    }
+
+    .path-wrap {
+      position: absolute;
+      left: var(--path-x);
+      top: 6vh;
+      bottom: 8vh;
+      width: 92px;
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+
+    .path {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 18px;
+      transform: translateX(-50%);
+      border-radius: 999px;
+      background:
+        linear-gradient(180deg, rgba(255, 247, 222, 0.18), rgba(255, 211, 107, 0.95), rgba(255, 247, 222, 0.18)),
+        linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+      box-shadow:
+        0 0 18px rgba(255, 211, 107, 0.78),
+        0 0 44px rgba(241, 169, 60, 0.58),
+        0 0 92px rgba(255, 211, 107, 0.28);
+    }
+
+    .path::before,
+    .path::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      width: 72px;
+      height: 100%;
+      transform: translateX(-50%);
+      background: linear-gradient(90deg, transparent, rgba(255, 211, 107, 0.22), transparent);
+      filter: blur(12px);
+    }
+
+    .intro-copy {
+      position: absolute;
+      left: clamp(18px, 7vw, 112px);
+      top: clamp(22px, 8vh, 80px);
+      max-width: min(500px, 82vw);
+      color: #3a314b;
+      text-shadow: 0 2px 20px rgba(255, 255, 255, 0.8);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .intro-copy.hide {
+      opacity: 0;
+      transform: translateY(-16px);
+    }
+
+    .intro-copy h1 {
+      margin: 0 0 10px;
+      font-size: clamp(2.2rem, 7vw, 5.5rem);
+      line-height: 0.95;
+      letter-spacing: 0;
+    }
+
+    .sparkle-layer,
+    .celebration-layer {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .sparkle-layer {
+      z-index: 12;
+    }
+
+    .celebration-layer {
+      z-index: 17;
+    }
+
+    .sparkle-piece {
+      position: absolute;
+      left: var(--x);
+      top: var(--y);
+      width: var(--size);
+      height: var(--size);
+      border-radius: 50%;
+      background: var(--spark, #fff7de);
+      box-shadow: 0 0 12px var(--spark, #fff7de), 0 0 26px rgba(255, 211, 107, 0.55);
+      transform: translate(-50%, -50%);
+      animation: sparkleBurst 1.25s ease-out forwards;
+    }
+
+    .sparkle-piece.shimmer {
+      border-radius: 0;
+      clip-path: polygon(50% 0, 62% 36%, 100% 50%, 62% 64%, 50% 100%, 38% 64%, 0 50%, 38% 36%);
+    }
+
+    @keyframes sparkleBurst {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.2) rotate(0deg);
+      }
+      18% {
+        opacity: 1;
+      }
+      to {
+        opacity: 0;
+        transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.25) rotate(210deg);
+      }
+    }
+
+    .confetti-piece,
+    .love-heart {
+      position: absolute;
+      left: var(--x);
+      top: -8vh;
+      pointer-events: none;
+      animation: celebrationFall var(--dur) linear forwards;
+      animation-delay: var(--delay);
+    }
+
+    .confetti-piece {
+      width: 9px;
+      height: 16px;
+      border-radius: 2px;
+      background: var(--color);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    .love-heart {
+      width: 18px;
+      height: 18px;
+      background: var(--color);
+      transform: rotate(45deg);
+      filter: drop-shadow(0 0 10px rgba(246, 167, 187, 0.7));
+    }
+
+    .love-heart::before,
+    .love-heart::after {
+      content: "";
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: inherit;
+    }
+
+    .love-heart::before {
+      left: -9px;
+      top: 0;
+    }
+
+    .love-heart::after {
+      left: 0;
+      top: -9px;
+    }
+
+    @keyframes celebrationFall {
+      from {
+        opacity: 0;
+        transform: translateY(0) translateX(0) rotate(0deg) scale(0.75);
+      }
+      10% {
+        opacity: 1;
+      }
+      to {
+        opacity: 0;
+        transform: translateY(118vh) translateX(var(--drift)) rotate(520deg) scale(1);
+      }
+    }
+
+    .intro-copy p {
+      margin: 0;
+      max-width: 34rem;
+      font-size: clamp(1rem, 2.2vw, 1.35rem);
+      line-height: 1.7;
+    }
+
+    .sound-panel {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 20;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      padding: 7px;
+      border: 1px solid rgba(255, 255, 255, 0.62);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.38);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 14px 40px rgba(75, 53, 90, 0.12);
+    }
+
+    .sound-panel button {
+      min-width: 118px;
+      min-height: 40px;
+      border: 0;
+      border-radius: 999px;
+      padding: 8px 13px;
+      color: #4c3656;
+      background: rgba(255, 247, 222, 0.9);
+      box-shadow: inset 0 0 0 1px rgba(255, 211, 107, 0.45);
+      cursor: pointer;
+      transition: transform 0.18s ease, background 0.18s ease;
+    }
+
+    .sound-panel button:hover,
+    .sound-panel button.active {
+      transform: translateY(-1px);
+      background: #ffe8a5;
+    }
+
+    .sound-panel button::before {
+      content: "♪";
+      display: inline-grid;
+      place-items: center;
+      width: 1.5em;
+      height: 1.5em;
+      margin-right: 6px;
+      border-radius: 50%;
+      color: #624037;
+      background: rgba(255, 211, 107, 0.44);
+      font-family: Arial, sans-serif;
+      font-weight: 700;
+    }
+
+    .memory {
+      position: absolute;
+      left: calc(var(--path-x) + var(--side, 1) * min(18vw, 260px));
+      top: var(--top);
+      width: min(285px, 34vw);
+      transform: translate(-50%, -50%) translateY(28px) scale(0.92);
+      opacity: 0;
+      transition: opacity 0.85s ease, transform 0.85s cubic-bezier(.2,.8,.2,1), filter 0.85s ease;
+      filter: blur(10px);
+      z-index: 5;
+    }
+
+    .memory.visible .photo {
+      animation: photoGlow 1.35s ease-out;
+    }
+
+    @keyframes photoGlow {
+      0% { box-shadow: 0 0 0 rgba(255, 211, 107, 0), 0 0 0 rgba(255, 255, 255, 0); }
+      42% { box-shadow: 0 22px 54px rgba(59, 42, 77, 0.18), 0 0 80px rgba(255, 211, 107, 0.82); }
+      100% { box-shadow: 0 22px 54px rgba(59, 42, 77, 0.18), 0 0 38px rgba(255, 211, 107, 0.3); }
+    }
+
+    .memory.visible {
+      opacity: 1;
+      transform: translate(-50%, -50%) translateY(0) scale(1);
+      filter: blur(0);
+    }
+
+    .memory.seen:not(.visible) {
+      opacity: 0.22;
+      transform: translate(-50%, -50%) translateY(0) scale(0.94);
+      filter: blur(2px);
+    }
+
+    .photo {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      border: 9px solid rgba(255, 255, 255, 0.9);
+      border-bottom-width: 28px;
+      border-radius: 10px;
+      overflow: visible;
+      background:
+        linear-gradient(135deg, rgba(255, 211, 107, 0.36), rgba(246, 167, 187, 0.32)),
+        #fff9e2;
+      box-shadow:
+        0 24px 56px rgba(59, 42, 77, 0.16),
+        0 0 34px rgba(255, 211, 107, 0.24);
+    }
+
+    .photo img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .photo::after {
+      content: attr(data-label);
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      color: rgba(70, 47, 73, 0.72);
+      font: 700 clamp(1rem, 2vw, 1.6rem) Arial, sans-serif;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.48));
+    }
+
+    .memory.has-image .photo::after {
+      opacity: 0;
+    }
+
+    .memory small {
+      display: block;
+      margin-top: 10px;
+      color: rgba(48, 38, 70, 0.76);
+      font: 600 0.78rem Arial, sans-serif;
+      letter-spacing: 0.08em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .marker {
+      position: absolute;
+      left: 50%;
+      top: var(--top);
+      width: 25px;
+      height: 25px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, #fff 0 16%, var(--gold) 32%, var(--gold-deep) 72%, rgba(241, 169, 60, 0.2) 100%);
+      box-shadow: 0 0 14px rgba(255, 211, 107, 0.9), 0 0 38px rgba(255, 211, 107, 0.52);
+      transition: transform 0.5s ease, box-shadow 0.5s ease, filter 0.5s ease;
+      z-index: 4;
+    }
+
+    .marker.active,
+    .marker.seen,
+    .marker.final-glow {
+      transform: translate(-50%, -50%) scale(1.45);
+      box-shadow: 0 0 20px #fff7de, 0 0 54px rgba(255, 211, 107, 0.88), 0 0 96px rgba(241, 169, 60, 0.45);
+      filter: saturate(1.3);
+    }
+
+    .marker-particle {
+      position: absolute;
+      left: calc(50% + var(--dx));
+      top: calc(var(--top) + var(--dy));
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: rgba(255, 247, 222, 0.95);
+      box-shadow: 0 0 12px rgba(255, 211, 107, 0.9);
+      animation: floatParticle var(--dur) ease-in-out infinite;
+      animation-delay: var(--delay);
+    }
+
+    @keyframes floatParticle {
+      0%, 100% { transform: translateY(7px) scale(0.75); opacity: 0.18; }
+      50% { transform: translateY(-10px) scale(1.22); opacity: 1; }
+    }
+
+    .silhouette {
+      position: absolute;
+      left: var(--path-x);
+      top: var(--girl-y);
+      width: 86px;
+      height: 172px;
+      transform: translate(-50%, -88%) scale(var(--girl-scale));
+      transform-origin: 50% 92%;
+      z-index: 8;
+      transition: top 0.18s linear, transform 0.45s ease;
+      filter: drop-shadow(0 14px 12px rgba(55, 42, 70, 0.24));
+    }
+
+    .silhouette.returning {
+      transition: top 2.1s cubic-bezier(.5,0,.2,1), transform 0.45s ease;
+    }
+
+    .silhouette.facing-left .body-set {
+      transform: scaleX(-1);
+    }
+
+    .body-set {
+      position: absolute;
+      inset: 0;
+      transform-origin: 50% 84%;
+    }
+
+    .head {
+      position: absolute;
+      left: 28px;
+      top: 3px;
+      width: 31px;
+      height: 31px;
+      border-radius: 50%;
+      background: var(--ink);
+    }
+
+    .hair {
+      position: absolute;
+      left: 21px;
+      top: 6px;
+      width: 40px;
+      height: 43px;
+      border-radius: 48% 52% 48% 52%;
+      background: var(--ink);
+      transform: rotate(-8deg);
+    }
+
+    .bow {
+      position: absolute;
+      left: 54px;
+      top: 13px;
+      width: 22px;
+      height: 15px;
+      z-index: 2;
+      filter: drop-shadow(0 0 7px rgba(255, 211, 107, 0.55));
+    }
+
+    .bow::before,
+    .bow::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      width: 11px;
+      height: 11px;
+      border-radius: 70% 30% 70% 30%;
+      background: linear-gradient(135deg, var(--rose), var(--gold));
+    }
+
+    .bow::before {
+      left: 0;
+      transform: rotate(-28deg);
+    }
+
+    .bow::after {
+      right: 0;
+      transform: rotate(28deg) scaleX(-1);
+    }
+
+    .dress-shine {
+      position: absolute;
+      left: 35px;
+      top: 45px;
+      width: 17px;
+      height: 42px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(255, 247, 222, 0.72), rgba(255, 211, 107, 0));
+      opacity: 0.5;
+      transform: rotate(-9deg);
+      pointer-events: none;
+    }
+
+    .torso {
+      position: absolute;
+      left: 27px;
+      top: 36px;
+      width: 34px;
+      height: 62px;
+      border-radius: 42% 42% 26% 26%;
+      background: var(--ink);
+      clip-path: polygon(28% 0, 72% 0, 92% 100%, 8% 100%);
+    }
+
+    .arm,
+    .leg {
+      position: absolute;
+      background: var(--ink);
+      transform-origin: 50% 0;
+    }
+
+    .arm {
+      top: 43px;
+      width: 9px;
+      height: 55px;
+      border-radius: 999px;
+    }
+
+    .arm.left {
+      left: 22px;
+      transform: rotate(18deg);
+    }
+
+    .arm.right {
+      left: 57px;
+      transform: rotate(-18deg);
+    }
+
+    .leg {
+      top: 92px;
+      width: 11px;
+      height: 70px;
+      border-radius: 999px;
+    }
+
+    .leg.left {
+      left: 33px;
+    }
+
+    .leg.right {
+      left: 48px;
+    }
+
+    .foot {
+      position: absolute;
+      bottom: -3px;
+      width: 20px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--ink);
+    }
+
+    .leg.left .foot {
+      right: -7px;
+      transform: rotate(10deg);
+    }
+
+    .leg.right .foot {
+      left: -2px;
+      transform: rotate(-10deg);
+    }
+
+    .silhouette.moving .body-set {
+      animation: bodyBob var(--stride-speed) ease-in-out infinite;
+    }
+
+    .silhouette.moving .arm.left {
+      animation: armLeft var(--stride-speed) ease-in-out infinite;
+    }
+
+    .silhouette.moving .arm.right {
+      animation: armRight var(--stride-speed) ease-in-out infinite;
+    }
+
+    .silhouette.moving .leg.left {
+      animation: legLeft var(--stride-speed) ease-in-out infinite;
+    }
+
+    .silhouette.moving .leg.right {
+      animation: legRight var(--stride-speed) ease-in-out infinite;
+    }
+
+    @keyframes bodyBob {
+      0%, 100% { transform: translateY(0) rotate(-1deg); }
+      50% { transform: translateY(-4px) rotate(1deg); }
+    }
+
+    @keyframes armLeft {
+      0%, 100% { transform: rotate(calc(var(--limb-swing) * -1)); }
+      50% { transform: rotate(var(--limb-swing)); }
+    }
+
+    @keyframes armRight {
+      0%, 100% { transform: rotate(var(--limb-swing)); }
+      50% { transform: rotate(calc(var(--limb-swing) * -1)); }
+    }
+
+    @keyframes legLeft {
+      0%, 100% { transform: rotate(var(--limb-swing)); }
+      50% { transform: rotate(calc(var(--limb-swing) * -1)); }
+    }
+
+    @keyframes legRight {
+      0%, 100% { transform: rotate(calc(var(--limb-swing) * -1)); }
+      50% { transform: rotate(var(--limb-swing)); }
+    }
+
+    .father {
+      position: absolute;
+      left: var(--path-x);
+      top: 86vh;
+      width: 126px;
+      height: 240px;
+      transform: translate(-50%, -94%) scale(0.9);
+      transform-origin: 50% 92%;
+      z-index: 7;
+      opacity: 0;
+      filter: drop-shadow(0 18px 14px rgba(55, 42, 70, 0.26));
+      transition: opacity 0.8s ease, top 1s ease, transform 1s ease;
+    }
+
+    .father.visible {
+      opacity: 1;
+    }
+
+    .father.start {
+      animation: papaWait 3.2s ease-in-out infinite;
+    }
+
+    .father.start {
+      top: var(--family-y);
+      opacity: 1;
+      transform: translate(calc(-50% - clamp(34px, 6vw, 56px)), -94%) scale(clamp(0.66, 0.55 + 0.24vw, 0.86));
+    }
+
+    .father.final {
+      top: var(--family-y);
+      opacity: 1;
+      transform: translate(calc(-50% - clamp(32px, 5vw, 48px)), -94%) scale(clamp(0.74, 0.62 + 0.28vw, 0.98));
+    }
+
+    .father .f-head {
+      position: absolute;
+      left: 43px;
+      top: 0;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--ink);
+    }
+
+    .father .f-head::before {
+      content: "";
+      position: absolute;
+      left: 8px;
+      top: 18px;
+      width: 28px;
+      height: 9px;
+      border-top: 3px solid rgba(255, 247, 222, 0.74);
+      border-radius: 50%;
+      opacity: 0.72;
+    }
+
+    .father .f-head::after {
+      content: "";
+      position: absolute;
+      left: 2px;
+      top: 10px;
+      width: 38px;
+      height: 16px;
+      border-radius: 50% 50% 18% 18%;
+      background: var(--ink);
+      transform: rotate(-5deg);
+    }
+
+    .father .f-body {
+      position: absolute;
+      left: 36px;
+      top: 42px;
+      width: 56px;
+      height: 118px;
+      border-radius: 46% 46% 22% 22%;
+      background: var(--ink);
+      clip-path: polygon(23% 0, 77% 0, 95% 100%, 5% 100%);
+    }
+
+    .father .f-collar {
+      position: absolute;
+      left: 47px;
+      top: 45px;
+      width: 34px;
+      height: 24px;
+      z-index: 2;
+    }
+
+    .father .f-collar::before,
+    .father .f-collar::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      width: 17px;
+      height: 20px;
+      background: rgba(255, 247, 222, 0.76);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+    }
+
+    .father .f-collar::before {
+      left: 0;
+      transform: rotate(12deg);
+    }
+
+    .father .f-collar::after {
+      right: 0;
+      transform: rotate(-12deg);
+    }
+
+    .father .f-heart {
+      position: absolute;
+      left: 69px;
+      top: 77px;
+      width: 13px;
+      height: 13px;
+      z-index: 3;
+      background: var(--gold);
+      transform: rotate(45deg);
+      box-shadow: 0 0 12px rgba(255, 211, 107, 0.75);
+    }
+
+    .father .f-heart::before,
+    .father .f-heart::after {
+      content: "";
+      position: absolute;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+
+    .father .f-heart::before {
+      left: -7px;
+      top: 0;
+    }
+
+    .father .f-heart::after {
+      left: 0;
+      top: -7px;
+    }
+
+    .father .f-arm {
+      position: absolute;
+      top: 56px;
+      width: 13px;
+      height: 92px;
+      border-radius: 999px;
+      background: var(--ink);
+      transform-origin: 50% 0;
+      transition: transform 1s ease;
+    }
+
+    .father .f-arm.left {
+      left: 30px;
+      transform: rotate(22deg);
+    }
+
+    .father .f-arm.right {
+      left: 84px;
+      transform: rotate(-22deg);
+    }
+
+    .father.start .f-arm.right {
+      animation: welcomeWave 2.8s ease-in-out infinite;
+    }
+
+    .father .f-leg {
+      position: absolute;
+      top: 150px;
+      width: 15px;
+      height: 82px;
+      border-radius: 999px;
+      background: var(--ink);
+    }
+
+    .father .f-leg.left { left: 49px; transform: rotate(4deg); }
+    .father .f-leg.right { left: 67px; transform: rotate(-4deg); }
+
+    @keyframes papaWait {
+      0%, 100% { filter: drop-shadow(0 18px 14px rgba(55, 42, 70, 0.26)); }
+      50% { filter: drop-shadow(0 20px 18px rgba(241, 169, 60, 0.32)); }
+    }
+
+    @keyframes welcomeWave {
+      0%, 100% { transform: rotate(-22deg); }
+      45% { transform: rotate(-52deg) translateY(-3px); }
+      70% { transform: rotate(-38deg) translateY(-1px); }
+    }
+
+    .holding .father .f-arm.left {
+      transform: rotate(20deg);
+    }
+
+    .holding .father .f-arm.right {
+      transform: rotate(-76deg) translate(8px, -2px);
+    }
+
+    .holding .silhouette {
+      top: var(--family-y);
+      transform: translate(calc(-50% + 48px), -88%) scale(0.86);
+    }
+
+    .holding .silhouette .arm.left {
+      transform: rotate(74deg) translate(-2px, -1px);
+    }
+
+    .holding .silhouette .arm.right {
+      transform: rotate(-18deg);
+    }
+
+    .hug-glow {
+      position: absolute;
+      left: var(--path-x);
+      top: var(--family-y);
+      width: min(420px, 84vw);
+      aspect-ratio: 1;
+      transform: translate(-50%, -50%) scale(0.35);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 247, 222, 0.75), rgba(255, 211, 107, 0.35) 35%, transparent 68%);
+      opacity: 0;
+      z-index: 3;
+      transition: opacity 1.1s ease, transform 1.4s ease;
+      pointer-events: none;
+    }
+
+    .holding .hug-glow {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .final-message {
+      position: absolute;
+      inset: 0;
+      z-index: 18;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1.2s ease;
+    }
+
+    .final-message.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .final-content {
+      display: grid;
+      grid-template-columns: minmax(190px, 0.78fr) minmax(280px, 1.22fr);
+      gap: clamp(16px, 3vw, 28px);
+      align-items: stretch;
+      width: min(1050px, 94vw);
+      max-height: min(82vh, 780px);
+    }
+
+    .final-photo-card {
+      position: relative;
+      width: min(var(--final-photo-size), 92vw);
+      height: min(var(--final-photo-size), 92vw);
+      aspect-ratio: 1 / 1;
+      overflow: visible;
+      border: 10px solid rgba(255, 255, 255, 0.9);
+      border-bottom-width: 30px;
+      border-radius: 12px;
+      background:
+        linear-gradient(135deg, rgba(255, 216, 103, 0.38), rgba(246, 167, 187, 0.34)),
+        #fff9e2;
+      box-shadow: 0 28px 92px rgba(62, 40, 76, 0.18), 0 0 46px rgba(255, 211, 107, 0.3);
+      transform: rotate(-2deg);
+    }
+
+    .final-photo-card img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .final-photo-card::after {
+      content: attr(data-label);
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 22px;
+      color: rgba(70, 47, 73, 0.72);
+      font: 700 clamp(1rem, 2vw, 1.45rem) Arial, sans-serif;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.52));
+    }
+
+    .final-photo-card.has-image::after {
+      opacity: 0;
+    }
+
+    .message-paper {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      max-height: min(82vh, 780px);
+      overflow: hidden;
+      padding: clamp(22px, 5vw, 46px);
+      border: 1px solid rgba(255, 255, 255, 0.78);
+      border-radius: 8px;
+      background: rgba(255, 250, 236, 0.82);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 26px 90px rgba(62, 40, 76, 0.22);
+    }
+
+    .message-copy {
+      overflow: auto;
+      padding-right: 8px;
+    }
+
+    .message-paper p {
+      margin: 0;
+      color: #382c4d;
+      font-size: clamp(1rem, 2.4vw, 1.35rem);
+      line-height: 1.8;
+      white-space: pre-line;
+    }
+
+    .photo-train {
+      display: grid;
+      grid-auto-flow: column;
+      gap: 16px;
+      overflow-x: auto;
+      padding: 18px 0 0;
+      margin-top: 20px;
+      border-top: 1px solid rgba(241, 169, 60, 0.22);
+      min-height: 220px;
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.85s ease, transform 0.85s ease;
+    }
+
+    .photo-train.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .train-card {
+      min-width: 200px;
+      width: 200px;
+      aspect-ratio: 4 / 3;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 5px solid rgba(255, 255, 255, 0.88);
+      background: #fff7de;
+      box-shadow: 0 20px 54px rgba(62, 40, 76, 0.14), 0 0 26px rgba(255, 211, 107, 0.18);
+    }
+
+    .train-card img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .train-card img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .message-memory::after {
+      content: attr(data-label);
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 12px;
+      color: rgba(70, 47, 73, 0.72);
+      font: 700 clamp(0.72rem, 1.4vw, 0.95rem) Arial, sans-serif;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.5));
+    }
+
+    .message-memory.has-image::after {
+      opacity: 0;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 0.55ch;
+      color: var(--gold-deep);
+      animation: cursor 0.8s step-end infinite;
+    }
+
+    @keyframes cursor {
+      50% { opacity: 0; }
+    }
+
+    .scroll-hint {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      z-index: 19;
+      transform: translateX(-50%);
+      color: rgba(55, 42, 70, 0.78);
+      font: 700 0.77rem Arial, sans-serif;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+      text-shadow: 0 1px 14px rgba(255, 255, 255, 0.95);
+      transition: opacity 0.5s ease;
+    }
+
+    .scroll-hint.hide {
+      opacity: 0;
+    }
+
+    .scene-nav {
+      position: fixed;
+      right: 16px;
+      bottom: 18px;
+      z-index: 20;
+      display: grid;
+      gap: 8px;
+    }
+
+    .scene-nav button {
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      border-radius: 50%;
+      color: #4c3656;
+      background: rgba(255, 247, 222, 0.82);
+      box-shadow: 0 12px 30px rgba(75, 53, 90, 0.14), inset 0 0 0 1px rgba(255, 211, 107, 0.34);
+      cursor: pointer;
+      backdrop-filter: blur(14px);
+      transition: transform 0.18s ease, background 0.18s ease;
+    }
+
+    .scene-nav button:hover {
+      transform: translateY(-1px);
+      background: #ffe8a5;
+    }
+
+    @media (max-width: 760px) {
+      :root {
+        --path-x: 50%;
+      }
+
+      .scene {
+        min-height: 590px;
+      }
+
+      .sound-panel {
+        top: 10px;
+        right: 10px;
+        left: auto;
+        justify-content: center;
+      }
+
+      .sound-panel button {
+        min-height: 34px;
+        padding: 7px 10px;
+        font-size: 0.82rem;
+      }
+
+      .intro-copy {
+        top: 92px;
+        left: 18px;
+        right: 90px;
+      }
+
+      .path-wrap {
+        width: 72px;
+      }
+
+      .memory {
+        left: 50%;
+        top: calc(var(--top) - 8vh);
+        width: min(245px, 72vw);
+        transform: translate(-50%, -50%) translateY(28px) scale(0.9);
+      }
+
+      .memory.visible,
+      .memory.seen:not(.visible) {
+        transform: translate(-50%, -50%) translateY(0) scale(0.94);
+      }
+
+      .memory small {
+        display: none;
+      }
+
+      .scene-nav {
+        right: 10px;
+        bottom: 12px;
+      }
+
+      .scene-nav button {
+        width: 40px;
+        height: 40px;
+      }
+
+      .final-content {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        max-height: 86vh;
+      }
+
+      .final-photo-card {
+        min-height: 190px;
+        max-height: 30vh;
+        transform: rotate(-1deg);
+      }
+
+      .message-paper {
+        max-height: 50vh;
+      }
+
+      .message-memory-strip {
+        gap: 10px;
+        margin-top: 16px;
+        padding-top: 14px;
+      }
+
+      .silhouette {
+        width: 76px;
+      }
+
+      .holding .silhouette {
+        transform: translate(calc(-50% + 36px), -88%) scale(0.76);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="story" id="story">
+    <section class="scene" id="scene" aria-label="A Father's Day memory journey">
+      <div class="aurora"></div>
+      <div class="stars" id="stars" aria-hidden="true"></div>
+      <div class="sparkle-layer" id="sparkleLayer" aria-hidden="true"></div>
+      <div class="celebration-layer" id="celebrationLayer" aria-hidden="true"></div>
+
+      <div class="sound-panel" aria-label="Sound controls">
+        <button type="button" id="soundToggle" aria-pressed="false">Unmute sound</button>
+      </div>
+
+      <div class="intro-copy" id="introCopy">
+        <h1>Happy Father's Day</h1>
+      </div>
+
+      <div class="path-wrap" id="pathWrap" aria-hidden="true">
+        <div class="path"></div>
+        <div id="markers"></div>
+      </div>
+
+      <article class="memory" style="--top: 36%; --side: -1;" data-stop="0">
+        <div class="photo" data-label="father-photo1.jpg"><img src="father-photo1.jpg" alt="Memory photo 1" /></div>
+        <small>First little steps</small>
+      </article>
+      <article class="memory" style="--top: 49%; --side: 1;" data-stop="1">
+        <div class="photo" data-label="father-photo2.jpg"><img src="father-photo2.jpg" alt="Memory photo 2" /></div>
+        <small>School days</small>
+      </article>
+      <article class="memory" style="--top: 62%; --side: -1;" data-stop="2">
+        <div class="photo" data-label="father-photo3.jpg"><img src="father-photo3.jpg" alt="Memory photo 3" /></div>
+        <small>Growing dreams</small>
+      </article>
+      <article class="memory" style="--top: 74%; --side: 1;" data-stop="3">
+        <div class="photo" data-label="father-photo4.jpg"><img src="father-photo4.jpg" alt="Memory photo 4" /></div>
+        <small>Finding courage</small>
+      </article>
+      <article class="memory" style="--top: 86%; --side: -1;" data-stop="4">
+        <div class="photo" data-label="father-photo5.jpg"><img src="father-photo5.jpg" alt="Memory photo 5" /></div>
+        <small>Running toward love</small>
+      </article>
+
+      <div class="father start" id="father" aria-hidden="true">
+        <div class="f-head"></div>
+        <div class="f-body"></div>
+        <div class="f-collar"></div>
+        <div class="f-heart"></div>
+        <div class="f-arm left"></div>
+        <div class="f-arm right"></div>
+        <div class="f-leg left"></div>
+        <div class="f-leg right"></div>
+      </div>
+
+      <div class="silhouette moving" id="girl" aria-hidden="true">
+        <div class="body-set">
+          <div class="hair"></div>
+          <div class="bow"></div>
+          <div class="head"></div>
+          <div class="torso"></div>
+          <div class="dress-shine"></div>
+          <div class="arm left"></div>
+          <div class="arm right"></div>
+          <div class="leg left"><span class="foot"></span></div>
+          <div class="leg right"><span class="foot"></span></div>
+        </div>
+      </div>
+
+      <div class="hug-glow" aria-hidden="true"></div>
+
+      <div class="final-message" id="finalMessage" aria-live="polite">
+        <div class="final-content">
+          <div class="final-photo-card" id="finalPhotoCard" data-label="father-final.jpg">
+            <img src="father-final.jpg" alt="Papa and daughter final memory photo" />
+          </div>
+          <div class="message-paper">
+            <div class="message-copy">
+              <p><span id="typedText"></span><span class="cursor">|</span></p>
+            </div>
+            <div class="photo-train" id="photoTrain" aria-label="Memory photo train"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div class="scroll-hint" id="scrollHint">Scroll the golden path</div>
+
+  <script>
+    // Replace these files beside this HTML file to personalize the memories and sound.
+    const imageFiles = [
+      "father-photo1.jpg",
+      "father-photo2.jpg",
+      "father-photo3.jpg",
+      "father-photo4.jpg",
+      "father-photo5.jpg"
+    ];
+    const audioFiles = {
+      song: "song.mp3"
+    };
+
+    const finalText = `Happy Father's Day, Papa ❤️
+
+Every step of this adventure has been brighter because of you. Your kindness, strength, and gentle guidance give me courage every day.
+
+Thank you for the laughter, the hugs, and the quiet moments that mean the most. I carry your love with me always.
+
+You are my hero, my guide, and the one I look up to the most. I am forever grateful to be your daughter.
+
+Happy Father's Day, Papa. I love you more than words can say.`;
+
+    const scene = document.getElementById("scene");
+    const story = document.getElementById("story");
+    const girl = document.getElementById("girl");
+    const father = document.getElementById("father");
+    const markersLayer = document.getElementById("markers");
+    const memories = [...document.querySelectorAll(".memory")];
+    const sparkleLayer = document.getElementById("sparkleLayer");
+    const celebrationLayer = document.getElementById("celebrationLayer");
+    const finalMessage = document.getElementById("finalMessage");
+    const finalPhotoCard = document.getElementById("finalPhotoCard");
+    const photoTrain = document.getElementById("photoTrain");
+    const messageMemories = [...document.querySelectorAll(".message-memory")];
+    const typedText = document.getElementById("typedText");
+    const introCopy = document.getElementById("introCopy");
+    const trainImages = [...imageFiles];
+    let infiniteCelebrationInterval = null;
+    const scrollHint = document.getElementById("scrollHint");
+    const soundToggle = document.getElementById("soundToggle");
+    const stopPositions = [0.13, 0.29, 0.45, 0.58, 0.81];
+    const stopTops = ["36%", "49%", "62%", "74%", "86%"];
+    const sceneTargets = [0, ...stopPositions, 0.985];
+    const seenStops = new Set();
+    const sounds = {};
+    let soundEnabled = true;
+    let returnStarted = false;
+    let typeStarted = false;
+    let celebrationStarted = false;
+    let lastStop = -1;
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function makeStars() {
+      const stars = document.getElementById("stars");
+      for (let i = 0; i < 78; i += 1) {
+        const star = document.createElement("span");
+        star.className = "star";
+        star.style.left = `${Math.random() * 100}%`;
+        star.style.top = `${Math.random() * 100}%`;
+        star.style.setProperty("--twinkle", `${2.2 + Math.random() * 3.4}s`);
+        star.style.setProperty("--delay", `${Math.random() * -4}s`);
+        stars.appendChild(star);
+      }
+    }
+
+    function makeMarkers() {
+      stopTops.forEach((top, index) => {
+        const marker = document.createElement("span");
+        marker.className = "marker";
+        marker.style.setProperty("--top", top);
+        marker.dataset.stop = String(index);
+        markersLayer.appendChild(marker);
+
+        // A small particle halo gives each memory a living, magical pulse.
+        for (let p = 0; p < 8; p += 1) {
+          const particle = document.createElement("span");
+          particle.className = "marker-particle";
+          particle.style.setProperty("--top", top);
+          particle.style.setProperty("--dx", `${-38 + Math.random() * 76}px`);
+          particle.style.setProperty("--dy", `${-32 + Math.random() * 64}px`);
+          particle.style.setProperty("--dur", `${2.5 + Math.random() * 2.8}s`);
+          particle.style.setProperty("--delay", `${Math.random() * -3}s`);
+          markersLayer.appendChild(particle);
+        }
+      });
+    }
+
+    function prepareImages() {
+      memories.forEach((memory, index) => {
+        const img = memory.querySelector("img");
+        img.src = imageFiles[index];
+        img.addEventListener("load", () => memory.classList.add("has-image"));
+        img.addEventListener("error", () => {
+          img.style.display = "none";
+          memory.classList.remove("has-image");
+        });
+      });
+
+      const finalImg = finalPhotoCard.querySelector("img");
+      finalImg.addEventListener("load", () => finalPhotoCard.classList.add("has-image"));
+      finalImg.addEventListener("error", () => {
+        finalImg.style.display = "none";
+        finalPhotoCard.classList.remove("has-image");
+      });
+
+      messageMemories.forEach(memory => {
+        const img = memory.querySelector("img");
+        img.addEventListener("load", () => memory.classList.add("has-image"));
+        img.addEventListener("error", () => {
+          img.style.display = "none";
+          memory.classList.remove("has-image");
+        });
+      });
+    }
+
+    function prepareSound() {
+      Object.entries(audioFiles).forEach(([name, file]) => {
+        const audio = new Audio(file);
+        audio.preload = "auto";
+        audio.loop = true;
+        audio.volume = 0.8;
+        sounds[name] = audio;
+      });
+    }
+
+    function configureStage() {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      let startY = 31;
+
+      if (width <= 760) startY = 38;
+      if (height < 660) startY = Math.max(startY, 42);
+      if (height > 860 && width > 760) startY = 29;
+
+      document.documentElement.style.setProperty("--start-y", startY);
+      document.documentElement.style.setProperty("--family-y", `${startY}vh`);
+    }
+
+    function playSound(name) {
+      if (!soundEnabled || !sounds[name]) return;
+      const audio = sounds[name];
+      if (!audio.paused) return;
+      audio.currentTime = 0;
+      const playPromise = audio.play();
+      if (playPromise && typeof playPromise.catch === "function") {
+        playPromise.catch(() => {
+          document.body.classList.add("music-blocked");
+        });
+      }
+    }
+
+    function ensureMusicPlaysOnInteraction() {
+      if (!soundEnabled || !sounds.song) return;
+      document.addEventListener("click", () => {
+        soundToggle.classList.add("active");
+        soundToggle.setAttribute("aria-pressed", "true");
+        soundToggle.textContent = "Mute sound";
+        playSound("song");
+      }, { once: true, capture: true });
+    }
+
+    function burstSparkles(x, y, sceneIndex) {
+      const colors = [
+        ["#fff7de", "#ffd36b", "#f6a7bb"],
+        ["#ffffff", "#8ecdc0", "#ffd36b"],
+        ["#e9e6ff", "#fff7de", "#8c7ad9"],
+        ["#fff7de", "#f1a93c", "#f6a7bb"],
+        ["#ffffff", "#ffd36b", "#ff8fab"]
+      ][sceneIndex] || ["#fff7de", "#ffd36b"];
+
+      for (let i = 0; i < 34; i += 1) {
+        const piece = document.createElement("span");
+        piece.className = `sparkle-piece ${i % 3 === 0 ? "shimmer" : ""}`;
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 46 + Math.random() * 116;
+        piece.style.setProperty("--x", `${x}px`);
+        piece.style.setProperty("--y", `${y}px`);
+        piece.style.setProperty("--tx", `${Math.cos(angle) * distance}px`);
+        piece.style.setProperty("--ty", `${Math.sin(angle) * distance}px`);
+        piece.style.setProperty("--size", `${4 + Math.random() * 9}px`);
+        piece.style.setProperty("--spark", colors[i % colors.length]);
+        sparkleLayer.appendChild(piece);
+        setTimeout(() => piece.remove(), 1350);
+      }
+    }
+
+    function sparkleStop(index) {
+      const marker = markersLayer.querySelector(`.marker[data-stop="${index}"]`);
+      const rect = marker?.getBoundingClientRect();
+      const x = rect ? rect.left + rect.width / 2 : window.innerWidth / 2;
+      const y = rect ? rect.top + rect.height / 2 : window.innerHeight / 2;
+      burstSparkles(x, y, index);
+    }
+
+    function sparkleAroundElement(element, sceneIndex) {
+      if (!element) return;
+      const rect = element.getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2;
+      burstSparkles(x, y, sceneIndex);
+    }
+
+    function celebratePhotoElement(element) {
+      if (!element) return;
+      const rect = element.getBoundingClientRect();
+      const colors = ["#ff8fab", "#ffd36b", "#8ecdc0", "#ffffff", "#f6a7bb"];
+
+      for (let i = 0; i < 24; i += 1) {
+        const piece = document.createElement("span");
+        const heart = i % 4 === 0;
+        piece.className = heart ? "love-heart" : "confetti-piece";
+        const x = rect.left + rect.width * (0.15 + Math.random() * 0.7);
+        const y = rect.top + rect.height * (0.05 + Math.random() * 0.35);
+        piece.style.left = `${x}px`;
+        piece.style.top = `${y}px`;
+        piece.style.setProperty("--drift", `${-90 + Math.random() * 180}px`);
+        piece.style.setProperty("--dur", `${3.2 + Math.random() * 3.4}s`);
+        piece.style.setProperty("--delay", `${Math.random() * 0.8}s`);
+        piece.style.setProperty("--color", colors[i % colors.length]);
+        celebrationLayer.appendChild(piece);
+        setTimeout(() => piece.remove(), 9200);
+      }
+    }
+
+    function startInfiniteCelebration() {
+      if (infiniteCelebrationInterval) return;
+      infiniteCelebrationInterval = window.setInterval(() => {
+        const target = finalMessage.getBoundingClientRect();
+        const count = 6;
+        for (let i = 0; i < count; i += 1) {
+          const piece = document.createElement("span");
+          const heart = Math.random() < 0.3;
+          piece.className = heart ? "love-heart" : "confetti-piece";
+          const x = target.left + Math.random() * target.width;
+          const y = target.top + Math.random() * target.height * 0.6;
+          piece.style.left = `${x}px`;
+          piece.style.top = `${y}px`;
+          piece.style.setProperty("--drift", `${-110 + Math.random() * 220}px`);
+          piece.style.setProperty("--dur", `${3.8 + Math.random() * 3.6}s`);
+          piece.style.setProperty("--delay", "0s");
+          piece.style.setProperty("--color", ["#ff8fab", "#ffd36b", "#8ecdc0", "#ffffff", "#f6a7bb"][i % 5]);
+          celebrationLayer.appendChild(piece);
+          setTimeout(() => piece.remove(), 9800);
+        }
+      }, 700);
+    }
+
+    function showPhotoTrain() {
+      photoTrain.innerHTML = "";
+      trainImages.forEach((src, index) => {
+        const card = document.createElement("div");
+        card.className = "train-card";
+        const img = document.createElement("img");
+        img.src = src;
+        img.alt = `Memory train ${index + 1}`;
+        card.appendChild(img);
+        photoTrain.appendChild(card);
+      });
+      photoTrain.classList.add("visible");
+    }
+
+    function celebrateMessage() {
+      if (celebrationStarted) return;
+      celebrationStarted = true;
+      const colors = ["#ff8fab", "#ffd36b", "#8ecdc0", "#ffffff", "#f6a7bb"];
+
+      celebratePhotoElement(finalPhotoCard);
+      messageMemories.forEach(memory => celebratePhotoElement(memory));
+
+      for (let i = 0; i < 90; i += 1) {
+        const piece = document.createElement("span");
+        const heart = i % 4 === 0;
+        piece.className = heart ? "love-heart" : "confetti-piece";
+        piece.style.setProperty("--x", `${Math.random() * 100}%`);
+        piece.style.setProperty("--drift", `${-90 + Math.random() * 180}px`);
+        piece.style.setProperty("--dur", `${3.6 + Math.random() * 3.4}s`);
+        piece.style.setProperty("--delay", `${Math.random() * 1.3}s`);
+        piece.style.setProperty("--color", colors[i % colors.length]);
+        celebrationLayer.appendChild(piece);
+        setTimeout(() => piece.remove(), 8200);
+      }
+    }
+
+    function scrollToProgress(progress) {
+      const max = story.offsetHeight - window.innerHeight;
+      window.scrollTo({ top: clamp(progress, 0, 1) * max, behavior: "smooth" });
+    }
+
+    function jumpScene(direction) {
+      const progress = currentProgress();
+      const sorted = [...sceneTargets].sort((a, b) => a - b);
+      const tolerance = 0.018;
+      let target = direction > 0 ? sorted[sorted.length - 1] : sorted[0];
+
+      if (direction > 0) {
+        target = sorted.find(scenePoint => scenePoint > progress + tolerance) ?? sorted[sorted.length - 1];
+      } else {
+        target = [...sorted].reverse().find(scenePoint => scenePoint < progress - tolerance) ?? sorted[0];
+      }
+
+      scrollToProgress(target);
+    }
+
+    function currentProgress() {
+      const max = story.offsetHeight - window.innerHeight;
+      return max <= 0 ? 0 : clamp(window.scrollY / max, 0, 1);
+    }
+
+    function motionForProgress(progress) {
+      if (progress < stopPositions[1]) {
+        return { speed: "2.7s", swing: "11deg", scale: 0.7 };
+      }
+      if (progress < stopPositions[2]) {
+        return { speed: "2.2s", swing: "14deg", scale: 0.8 };
+      }
+      if (progress < stopPositions[3]) {
+        return { speed: "1.5s", swing: "18deg", scale: 0.91 };
+      }
+      if (progress < stopPositions[4]) {
+        return { speed: "1.05s", swing: "24deg", scale: 1.02 };
+      }
+      return { speed: "0.76s", swing: "29deg", scale: 1.11 };
+    }
+
+    function revealStop(index) {
+      if (index < 0) return;
+      seenStops.add(index);
+      memories[index].classList.add("seen", "visible");
+      const marker = markersLayer.querySelector(`.marker[data-stop="${index}"]`);
+      marker?.classList.add("seen", "active");
+      sparkleAroundElement(memories[index].querySelector(".photo"), index);
+      celebratePhotoElement(memories[index].querySelector(".photo"));
+
+      window.clearTimeout(memories[index].hideTimer);
+      const visibleTime = index === 4 ? 3600 : 1650;
+      memories[index].hideTimer = window.setTimeout(() => {
+        memories[index].classList.remove("visible");
+        marker?.classList.remove("active");
+      }, visibleTime);
+    }
+
+    function updateScene() {
+      if (returnStarted) return;
+
+      const progress = currentProgress();
+      const pathStart = Number(getComputedStyle(document.documentElement).getPropertyValue("--start-y")) || 31;
+      const pathEnd = 84;
+      const y = pathStart + progress * (pathEnd - pathStart);
+      const motion = motionForProgress(progress);
+
+      document.documentElement.style.setProperty("--girl-y", `${y}vh`);
+      document.documentElement.style.setProperty("--girl-scale", motion.scale);
+      document.documentElement.style.setProperty("--stride-speed", motion.speed);
+      document.documentElement.style.setProperty("--limb-swing", motion.swing);
+
+      introCopy.classList.toggle("hide", progress > 0.08);
+      scrollHint.classList.toggle("hide", progress > 0.12);
+      father.classList.toggle("start", progress < 0.11);
+      father.classList.toggle("visible", progress < 0.11);
+
+      let activeStop = -1;
+      stopPositions.forEach((stop, index) => {
+        if (Math.abs(progress - stop) < 0.038) activeStop = index;
+      });
+
+      if (activeStop !== -1 && activeStop !== lastStop) {
+        lastStop = activeStop;
+        revealStop(activeStop);
+        playSound(activeStop < 2 ? "child" : "click");
+      }
+
+      memories.forEach((memory, index) => {
+        memory.classList.toggle("seen", seenStops.has(index));
+      });
+
+      if (progress > 0.985) {
+        beginReturn();
+      }
+    }
+
+    function beginReturn() {
+      if (returnStarted) return;
+      returnStarted = true;
+      scene.classList.add("zoom-out");
+      girl.classList.add("returning", "facing-left", "moving");
+      father.className = "father final visible";
+      document.querySelectorAll(".marker").forEach(marker => marker.classList.add("final-glow"));
+
+      setTimeout(() => {
+        const returnStops = [4, 3, 2, 1, 0];
+        returnStops.forEach((stop, order) => {
+          setTimeout(() => {
+            const marker = markersLayer.querySelector(`.marker[data-stop="${stop}"]`);
+            marker?.classList.add("active");
+            setTimeout(() => marker?.classList.remove("active"), 430);
+          }, order * 390);
+        });
+        document.documentElement.style.setProperty("--stride-speed", "0.62s");
+        document.documentElement.style.setProperty("--limb-swing", "32deg");
+        document.documentElement.style.setProperty("--girl-scale", "0.92");
+        const pathStart = Number(getComputedStyle(document.documentElement).getPropertyValue("--start-y")) || 31;
+        document.documentElement.style.setProperty("--girl-y", `${pathStart}vh`);
+      }, 650);
+
+      setTimeout(() => {
+        scene.classList.add("holding");
+        girl.classList.remove("moving", "facing-left");
+      }, 3250);
+
+      setTimeout(() => {
+        finalMessage.classList.add("visible");
+        celebrateMessage();
+        typeMessage();
+      }, 4550);
+    }
+
+    function typeMessage() {
+      if (typeStarted) return;
+      typeStarted = true;
+      let index = 0;
+      const step = () => {
+        typedText.textContent = finalText.slice(0, index);
+        index += 1;
+        if (index <= finalText.length) {
+          const char = finalText[index - 2] || "";
+          const delay = char === "." || char === "\n" ? 38 : 17;
+          window.setTimeout(step, delay);
+        } else {
+          showPhotoTrain();
+          startInfiniteCelebration();
+        }
+      };
+      step();
+    }
+
+    soundToggle.addEventListener("click", () => {
+      soundEnabled = !soundEnabled;
+      soundToggle.classList.toggle("active", soundEnabled);
+      soundToggle.setAttribute("aria-pressed", String(soundEnabled));
+      soundToggle.textContent = soundEnabled ? "Mute sound" : "Unmute sound";
+      if (soundEnabled) {
+        playSound("song");
+      } else {
+        sounds.song?.pause();
+      }
+    });
+
+    window.addEventListener("scroll", updateScene, { passive: true });
+    window.addEventListener("resize", () => {
+      configureStage();
+      if (returnStarted) {
+        const pathStart = Number(getComputedStyle(document.documentElement).getPropertyValue("--start-y")) || 31;
+        document.documentElement.style.setProperty("--girl-y", `${pathStart}vh`);
+      }
+      updateScene();
+    });
+
+    makeStars();
+    makeMarkers();
+    prepareImages();
+    prepareSound();
+
+    // Set default sound button state and try autoplay after sound assets are ready.
+    soundToggle.classList.add("active");
+    soundToggle.setAttribute("aria-pressed", "true");
+    soundToggle.textContent = "Mute sound";
+    playSound("song");
+    ensureMusicPlaysOnInteraction();
+
+    configureStage();
+    updateScene();
+  </script>
+</body>
+</html>
